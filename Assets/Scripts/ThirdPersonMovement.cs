@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ThirdPersonMovement : MonoBehaviour
 {
@@ -16,10 +17,17 @@ public class ThirdPersonMovement : MonoBehaviour
     float turnSmoothVelocity;
     new Vector3 playerVelocity;
     bool isGrounded;
+    bool canPickUp = false;
+    public int pagesCollected = 0;
+    public TMP_Text pageCount;
+    public TMP_Text pressE;
+    
 
     // Update is called once per frame
     void Update()
     {
+        pageCount.text = ("Pages Collected: " + pagesCollected);
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if(isGrounded && playerVelocity.y < 0)
@@ -45,6 +53,7 @@ public class ThirdPersonMovement : MonoBehaviour
         playerVelocity.y += gravity * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -53,9 +62,15 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        canPickUp = true;
+
         if (other.tag == ("Collectable"))
         {
-            other.gameObject.SetActive(false);
+            pressE.enabled = true;
+            pressE.text = ("Press E to collect");
+            
+            //other.gameObject.SetActive(false);
+            pagesCollected++; 
         }
     }
 }
