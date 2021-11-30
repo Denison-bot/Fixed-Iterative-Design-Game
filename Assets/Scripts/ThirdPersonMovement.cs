@@ -58,19 +58,22 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+
+        if (canPickUp == true && Input.GetKeyDown(KeyCode.E))
+        {
+            //Debug.Log("Button Pressed");
+            other.gameObject.SetActive(false);
+            pagesCollected++;
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        canPickUp = true;
-
         if (other.tag == ("Collectable"))
         {
-            pressE.enabled = true;
-            pressE.text = ("Press E to collect");
+            canPickUp = true;
             
-            //other.gameObject.SetActive(false);
-            pagesCollected++; 
+            pressE.text = ("Press E to collect");   
         }
     }
 }
