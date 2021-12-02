@@ -21,11 +21,13 @@ public class ThirdPersonMovement : MonoBehaviour
     public int pagesCollected = 0;
     public TMP_Text pageCount;
     public TMP_Text pressE;
-    
+    public GameObject currentObject;
+    public GameObject pressEText;
 
     // Update is called once per frame
     void Update()
     {
+        pressE.text = ("Press E to collect pages");
         pageCount.text = ("Pages Collected: " + pagesCollected);
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -62,18 +64,20 @@ public class ThirdPersonMovement : MonoBehaviour
         if (canPickUp == true && Input.GetKeyDown(KeyCode.E))
         {
             //Debug.Log("Button Pressed");
-            other.gameObject.SetActive(false);
+            currentObject.SetActive(false);
             pagesCollected++;
+            //pressEText.SetActive(false);
+            canPickUp = false;
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.tag == ("Collectable"))
         {
+            currentObject = other.gameObject;
+
             canPickUp = true;
-            
-            pressE.text = ("Press E to collect");   
-        }
+        }       
     }
 }
